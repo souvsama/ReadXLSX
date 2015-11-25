@@ -6,10 +6,11 @@ import java.util.Iterator;
 
 import com.radian.hasmap.xlsx.ReadFile;
 import com.radian.hasmap.xml.ReadXML;
+import com.radian.hasmap.xml.WriteXML;
 
 
 public class Trigger {
-	HashMap<String,String> changeList = new HashMap<String,String>();
+	static HashMap<String,String> changeList = new HashMap<String,String>();
 	HashMap<String,String> newList = new HashMap<String,String>();
 
 	public static void main(String[] args) {
@@ -26,7 +27,8 @@ public class Trigger {
 		Trigger trigger = new Trigger();
 		trigger.compare(descriptionList, nameList);
         trigger.output();		
-
+        trigger.query();
+        new WriteXML().getNameList(changeList);
 	}
 	
 	public void compare(HashMap<String,String> descriptionList,HashMap<String,String> nameList){
@@ -77,6 +79,17 @@ public class Trigger {
 			System.out.println(newCount+">  "+descriptor.toLowerCase() +"  --  New Entry on the XML File. Description --->"+newList.get(descriptor));
      	    System.out.println("");
      	   newCount++;
+		}
+	}
+	
+	public void query(){
+		Iterator<String> changeIterator = changeList.keySet().iterator();
+		System.out.println("");
+		System.out.println("\n******Query List****************\n");
+		while (changeIterator.hasNext()) {
+			String descriptor = changeIterator.next();
+			System.out.println("UPDATE pctl_SystemPermission SET name = " + changeList.get(descriptor) + " WHERE code = " + descriptor.toLowerCase() +";");
+			
 		}
 	}
 
